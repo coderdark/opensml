@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 
-const FRAMES = ["⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏"];
+const FRAMES = ["⠋ T", "⠙ Th", "⠹ Thi", "⠸ Thin", "⠼ Think", "⠴ Thinki", "⠦ Thinkin", "⠧ Thinking", "⠇ Thinking.", "⠏ Thinking..", "⠿ Thinking..."];
 
-export function Spinner({ label = "Thinking" }: { label?: string }) {
+export function Spinner() {
     const [frame, setFrame] = useState(0);
 
     useEffect(() => {
@@ -14,6 +14,6 @@ export function Spinner({ label = "Thinking" }: { label?: string }) {
     }, []);
 
     return <text fg={'orange'}>
-        {`${FRAMES[frame]} ${label}...`}
+        {`${FRAMES[frame]}`}
     </text>;
 }
