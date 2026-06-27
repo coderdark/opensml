@@ -3,6 +3,7 @@ import { createCliRenderer, InputRenderable } from "@opentui/core";
 import { createRoot } from "@opentui/react";
 import "dotenv/config";
 import OpenAI from "openai";
+import { Spinner } from "./spinner";
 import type { ChatCompletionMessageParam } from "openai/resources/chat/completions";
 
 const openai = new OpenAI({
@@ -18,6 +19,23 @@ async function chat(messages: ChatCompletionMessageParam[]) {
   });
 
   return stream.choices[0].message.content;
+}
+
+function UserMessage({ text }: { text: string }) {
+  return (
+    <box flexDirection="row" alignItems="center" backgroundColor="gray" borderStyle="single" borderColor="gray">
+      <text>|| </text>
+      <text>{text}</text>
+    </box>
+  );
+}
+
+function AssistantMessage({ text }: { text: string }) {
+  return (
+    <box flexDirection="row" alignItems="center">
+      <text>{text}</text>
+    </box>
+  );
 }
 
 function App() {
@@ -52,27 +70,27 @@ function App() {
     }
   }
 
-  const lines = history
-    .filter((m) => m.role !== "system")
-    .map((m) => {
-      const text = typeof m.content === "string" ? m.content : "";
-
-      return `${m.role === "user" ? "You" : "Assistant"}: ${text}`;
-    });
-
-  const transcript = lines.join("\n\n");
-
   return (
     <box flexDirection="column" height="100%">
       <box padding={1} gap={1} backgroundColor="black">
         <ascii-font font="tiny" text="OpenSLM" color="orange" />
         <text>gpt-oss CLI</text>
       </box>
-      <box flexGrow={1} padding={1} borderStyle="single" borderColor="gray">
-        <text>{transcript}</text>
+      <box flexGrow={1} padding={1} flexDirection="column" gap={1}>
+        {history
+          .filter((m) => m.role !== "system")
+          .map((m, i) => {
+            const text = typeof m.content === "string" ? m.content : "";
+
+            if (m.role === "user") {
+              return <UserMessage key={i} text={text} />;
+            }
+
+            return <AssistantMessage key={i} text={text} />;
+          })}
       </box>
-      <box>
-        <text>{loading ? "Thinking..." : ""}</text>
+      <box padding={1}>
+        {loading ? <Spinner /> : null}
       </box>
       <box flexDirection="row" padding={1} backgroundColor="black">
         <text>{"> "}</text>
