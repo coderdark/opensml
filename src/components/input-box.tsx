@@ -1,6 +1,6 @@
 import { TextareaRenderable } from "@opentui/core";
 import { ChatCompletionMessageParam } from "openai/resources";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Spinner } from "./spinner";
 
 interface InputBoxProps {
@@ -12,6 +12,7 @@ interface InputBoxProps {
 }
 
 export function InputBox({ loading, history, setHistory, setLoading, chat }: InputBoxProps) {
+    const [seconds, setSeconds] = useState(0);
     const inputRef = useRef<TextareaRenderable>(null);
 
     function clearInput() {
@@ -73,11 +74,22 @@ export function InputBox({ loading, history, setHistory, setLoading, chat }: Inp
         }
     }
 
-    return (<box flexGrow={0} flexDirection="column">
+    useEffect(() => {
+        if (loading) {
+            const interval = setInterval(() => {
+                setSeconds(seconds + 1);
+            }, 1000);
+
+            return () => clearInterval(interval);
+        }
+
+    }, [loading, seconds]);
+
+    return (<box flexGrow={1} flexDirection="column">
         <box flexDirection="row" padding={1}>
-            {loading ? <Spinner /> : <text fg="orange">Response time [10s]</text>}
+            {loading ? <Spinner /> : <text fg="orange">Response time [{seconds}s]</text>}
         </box>
-        <box flexDirection="row" flexGrow={0} padding={1}>
+        <box flexDirection="row" flexGrow={1} padding={1}>
             <text>{"> "}</text>
             <box flexGrow={1}>
                 <textarea
