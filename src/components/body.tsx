@@ -23,29 +23,30 @@ export function Body({ history, loading }: BodyProps) {
   }, [history, loading]);
 
   return (
-    <scrollbox
-      flexGrow={0}
-      style={{
-        contentOptions: { padding: 1, flexDirection: "column", gap: 1 },
-        scrollbarOptions: {
-          showArrows: true,
-          trackOptions: {
-            foregroundColor: "gray",
-            backgroundColor: "black",
+    <box flexGrow={1} flexDirection="column" paddingLeft={1} paddingRight={1}>
+      <scrollbox
+        style={{
+          contentOptions: { flexDirection: "column", gap: 1 },
+          scrollbarOptions: {
+            showArrows: true,
+            trackOptions: {
+              foregroundColor: "gray",
+              backgroundColor: "black",
+            },
           },
-        },
-      }}>
-      {history
-        .filter((m) => m.role !== "system")
-        .map((m, i) => {
-          const text = typeof m.content === "string" ? m.content : "";
+        }}>
+        {history
+          .filter((m) => m.role !== "system")
+          .map((m, i) => {
+            const text = typeof m.content === "string" ? m.content : "";
 
-          if (m.role === "user") {
-            return <UserMessage key={i} text={text} />;
-          }
+            if (m.role === "user") {
+              return <UserMessage key={i} text={text} />;
+            }
 
-          return <AssistantMessage key={i} text={text} />;
-        })}
-    </scrollbox>
+            return <AssistantMessage key={i} text={text} />;
+          })}
+      </scrollbox>
+    </box>
   );
 }

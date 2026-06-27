@@ -31,7 +31,7 @@ function App() {
   ]);
 
   return (
-    <box flexGrow={0} flexDirection="column" height="100%">
+    <box flexGrow={1} flexDirection="column" height="100%">
       <Header title="OpenSLM" subtitle="Your SLM (Small Language Model) CLI" />
       <Body history={history} loading={loading} />
       <InputBox

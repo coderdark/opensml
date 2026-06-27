@@ -85,11 +85,11 @@ export function InputBox({ loading, history, setHistory, setLoading, chat }: Inp
 
     }, [loading, seconds]);
 
-    return (<box flexGrow={1} flexDirection="column">
-        <box flexDirection="row" padding={1}>
+    return (<box flexGrow={1} flexShrink={0} flexDirection="column">
+        <box flexDirection="row" paddingLeft={1}>
             {loading ? <Spinner /> : <text fg="orange">Response time [{seconds}s]</text>}
         </box>
-        <box flexDirection="row" flexGrow={1} padding={1}>
+        <box flexDirection="row" flexGrow={1} flexShrink={0} padding={1}>
             <text>{"> "}</text>
             <box flexGrow={1}>
                 <textarea
