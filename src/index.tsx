@@ -1,41 +1,91 @@
-import { useState, useRef } from "react";
-import { createCliRenderer, TextAttributes, InputRenderable } from "@opentui/core";
+import { useRef, useState } from "react";
+import { createCliRenderer, InputRenderable } from "@opentui/core";
 import { createRoot } from "@opentui/react";
 import "dotenv/config";
 import OpenAI from "openai";
+import type { ChatCompletionMessageParam } from "openai/resources/chat/completions";
 
 const openai = new OpenAI({
   baseURL: process.env.BASE_URL,
   apiKey: process.env.API_KEY,
 });
 
+async function chat(messages: ChatCompletionMessageParam[]) {
+  const stream = await openai.chat.completions.create({
+    model: process.env.MODEL!,
+    messages,
+    stream: false,
+  });
+
+  return stream.choices[0].message.content;
+}
+
 function App() {
   const inputRef = useRef<InputRenderable>(null);
-  const [context, setContext] = useState<{ role: string; content: string }[]>([
+  const [loading, setLoading] = useState(false);
+  const [history, setHistory] = useState<ChatCompletionMessageParam[]>([
     { role: "system", content: "You are a helpful assistant." },
   ]);
 
-  function handleInputChange(value: string) {
-    setContext([...context, { role: "user", content: value }]);
+  async function submit(prompt: string) {
+    prompt = prompt.trim();
 
-    if (inputRef.current) {
-      inputRef.current.value = "";
+    if (!prompt || loading) return;
+
+    const next: ChatCompletionMessageParam[] = [...history, { role: "user", content: prompt }];
+
+    setHistory(next);
+    setLoading(true);
+
+    if (inputRef.current) inputRef.current.value = "";
+
+    try {
+      const reply = await chat(next);
+
+      setHistory((m) => [...m, { role: "assistant", content: reply }]);
+    } catch (e) {
+      const err = e instanceof Error ? e.message : "Request failed";
+
+      setHistory((m) => [...m, { role: "assistant", content: `Error: ${err}` }]);
+    } finally {
+      setLoading(false);
     }
   }
 
+  const lines = history
+    .filter((m) => m.role !== "system")
+    .map((m) => {
+      const text = typeof m.content === "string" ? m.content : "";
+
+      return `${m.role === "user" ? "You" : "Assistant"}: ${text}`;
+    });
+
+  const transcript = lines.join("\n\n");
+
   return (
-    <box flexDirection="column" alignItems="flex-start" gap={1} height="100%">
-      <box alignItems="flex-start" width="100%" height="20%" padding={1} gap={1} backgroundColor="orange">
-        <ascii-font font="tiny" text="OpenSLM" />
-        <text>Your open small language model cli</text>
+    <box flexDirection="column" height="100%">
+      <box padding={1} gap={1} backgroundColor="black">
+        <ascii-font font="tiny" text="OpenSLM" color="orange" />
+        <text>gpt-oss CLI</text>
       </box>
-      <box width="100%" backgroundColor="gray" height={"75%"} padding={1}>
-        <text>{context.map((item) => item.content).join("\n")}</text>
+      <box flexGrow={1} padding={1} borderStyle="single" borderColor="gray">
+        <text>{transcript}</text>
       </box>
-      <box flexDirection="row" width="100%" height="5%">
-        <text>{'>'} </text>
-        <box width="100%">
-          <input ref={inputRef} onChange={handleInputChange} placeholder="Ask me anything..." />
+      <box>
+        <text>{loading ? "Thinking..." : ""}</text>
+      </box>
+      <box flexDirection="row" padding={1} backgroundColor="black">
+        <text>{"> "}</text>
+        <box flexGrow={1}>
+          <input
+            ref={inputRef}
+            focused
+            placeholder={"Ask me anything..."}
+            onSubmit={(value) => {
+              const prompt = typeof value === "string" ? value : (inputRef.current?.value ?? "");
+              void submit(prompt);
+            }}
+          />
         </box>
       </box>
     </box>
