@@ -4,8 +4,8 @@ interface UserMessageProps {
 
 export function UserMessage({ text }: UserMessageProps) {
     return (
-        <box flexDirection="row" alignItems="center" backgroundColor="gray" borderStyle="single" borderColor="gray">
-            <text>{'>'} </text>
+        <box flexDirection="row" alignItems="center" backgroundColor="gray">
+            <text>{'> '}</text>
             <text>{text}</text>
         </box>
     );

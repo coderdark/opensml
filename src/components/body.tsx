@@ -5,13 +5,13 @@ import { useEffect, useRef } from "react";
 import { ScrollBoxRenderable } from "@opentui/core";
 
 interface BodyProps {
-    history: ChatCompletionMessageParam[];
-    loading: boolean;
+  history: ChatCompletionMessageParam[];
+  loading: boolean;
 }
 
 export function Body({ history, loading }: BodyProps) {
   const scrollRef = useRef<ScrollBoxRenderable>(null);
-  
+
   useEffect(() => {
     const scrollbox = scrollRef.current;
     if (!scrollbox) return;
@@ -21,33 +21,31 @@ export function Body({ history, loading }: BodyProps) {
       scrollbox.scrollHeight - scrollbox.viewport.height,
     );
   }, [history, loading]);
-  
-    return (
-        <scrollbox
-        flexGrow={1}
-        style={{
-          contentOptions: { padding: 1, flexDirection: "column", gap: 2 },
-          scrollbarOptions: {
-            showArrows: true,
-            trackOptions: {
-              foregroundColor: "gray",
-              backgroundColor: "black",
-            },
+
+  return (
+    <scrollbox
+      flexGrow={1}
+      style={{
+        contentOptions: { padding: 1, flexDirection: "column", gap: 1 },
+        scrollbarOptions: {
+          showArrows: true,
+          trackOptions: {
+            foregroundColor: "gray",
+            backgroundColor: "black",
           },
-        }}>
-        <box>
-          {history
-            .filter((m) => m.role !== "system")
-            .map((m, i) => {
-              const text = typeof m.content === "string" ? m.content : "";
+        },
+      }}>
+      {history
+        .filter((m) => m.role !== "system")
+        .map((m, i) => {
+          const text = typeof m.content === "string" ? m.content : "";
 
-              if (m.role === "user") {
-                return <UserMessage key={i} text={text} />;
-              }
+          if (m.role === "user") {
+            return <UserMessage key={i} text={text} />;
+          }
 
-              return <AssistantMessage key={i} text={text} />;
-            })}
-        </box>
-      </scrollbox>
-    );
+          return <AssistantMessage key={i} text={text} />;
+        })}
+    </scrollbox>
+  );
 }

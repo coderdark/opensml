@@ -4,7 +4,7 @@ interface AssistantMessageProps {
 
 export function AssistantMessage({ text }: AssistantMessageProps) {
     return (
-      <box flexDirection="row" alignItems="center" padding={1}>
+      <box flexDirection="row" alignItems="center">
         <text>{text}</text>
       </box>
     );

@@ -1,13 +1,13 @@
-import { useEffect, useRef, useState } from "react";
-import { createCliRenderer, InputRenderable, ScrollBoxRenderable } from "@opentui/core";
+import { useState } from "react";
+import { createCliRenderer } from "@opentui/core";
 import { createRoot } from "@opentui/react";
 import "dotenv/config";
 import OpenAI from "openai";
-import { Spinner } from "./components/spinner";
 import type { ChatCompletionMessageParam } from "openai/resources/chat/completions";
 import { Header } from "./components/header";
-import { Footer } from "./components/footer";
+import { InputBox } from "./components/input-box";
 import { Body } from "./components/body";
+import { Footer } from "./components/footer";
 
 const openai = new OpenAI({
   baseURL: process.env.BASE_URL,
@@ -31,15 +31,16 @@ function App() {
   ]);
 
   return (
-    <box flexDirection="column" height="100%">
-      <Header title="OpenSLM" subtitle="gpt-oss CLI" />
+    <box flexGrow={0} flexDirection="column" height="100%">
+      <Header title="OpenSLM" subtitle="Your SLM (Small Language Model) CLI" />
       <Body history={history} loading={loading} />
-      <Footer
+      <InputBox
         loading={loading}
         history={history}
         setHistory={setHistory}
         setLoading={setLoading}
         chat={chat as (messages: ChatCompletionMessageParam[]) => Promise<string>} />
+      <Footer />
     </box>
   );
 }
