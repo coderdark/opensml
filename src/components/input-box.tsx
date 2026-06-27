@@ -1,4 +1,4 @@
-import { InputRenderable } from "@opentui/core";
+import { TextareaRenderable } from "@opentui/core";
 import { ChatCompletionMessageParam } from "openai/resources";
 import { useRef } from "react";
 import { Spinner } from "./spinner";
@@ -12,31 +12,39 @@ interface InputBoxProps {
 }
 
 export function InputBox({ loading, history, setHistory, setLoading, chat }: InputBoxProps) {
-    const inputRef = useRef<InputRenderable>(null);
+    const inputRef = useRef<TextareaRenderable>(null);
+
+    function clearInput() {
+        inputRef.current?.clear();
+    }
+
+    function getInputValue() {
+        return inputRef.current?.plainText ?? "";
+    }
 
     async function handleSubmit(value: string) {
         if (value === "/clear") {
             setHistory([]);
 
-            if (inputRef.current) inputRef.current.value = "";
+            clearInput();
 
             return;
         }
 
         if (value === "/exit") {
-            if (inputRef.current) inputRef.current.value = "";
+            clearInput();
 
             return process.exit(0);
         }
 
         if (value === "/help") {
-            if (inputRef.current) inputRef.current.value = "";
+            clearInput();
 
             return console.log("Help");
         }
 
         if (value === "/settings") {
-            if (inputRef.current) inputRef.current.value = "";
+            clearInput();
 
             return console.log("Settings");
         }
@@ -50,7 +58,7 @@ export function InputBox({ loading, history, setHistory, setLoading, chat }: Inp
         setHistory(next);
         setLoading(true);
 
-        if (inputRef.current) inputRef.current.value = "";
+        clearInput();
 
         try {
             const reply = await chat(next);
@@ -65,17 +73,28 @@ export function InputBox({ loading, history, setHistory, setLoading, chat }: Inp
         }
     }
 
-    return (<box flexGrow={0} flexDirection="column" gap={1}>
-        {loading ? <Spinner /> : null}
-        <box flexDirection="row" backgroundColor="black">
+    return (<box flexGrow={0} flexDirection="column">
+        <box flexDirection="row" padding={1}>
+            {loading ? <Spinner /> : <text fg="orange">Response time [10s]</text>}
+        </box>
+        <box flexDirection="row" flexGrow={0} padding={1}>
             <text>{"> "}</text>
             <box flexGrow={1}>
-                <input
+                <textarea
                     ref={inputRef}
+                    backgroundColor="black"
+                    textColor="white"
+                    focusedBackgroundColor="black"
+                    focusedTextColor="white"
                     focused
-                    placeholder={"Ask me anything..."}
-                    onSubmit={(value) => {
-                        if (typeof value === "string") void handleSubmit(value);
+                    placeholder={"Ask me anything..."} 
+                    onSubmit={() => {
+                        void handleSubmit(getInputValue());
+                    }}
+                    onKeyDown={(e) => {
+                        if (e.name === "return" && !e.shift) {
+                            void handleSubmit(getInputValue());
+                        }
                     }}
                 />
             </box>
