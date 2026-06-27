@@ -25,30 +25,15 @@ async function chat(messages: ChatCompletionMessageParam[]) {
 }
 
 function App() {
-  const inputRef = useRef<InputRenderable>(null);
-  const scrollRef = useRef<ScrollBoxRenderable>(null);
   const [loading, setLoading] = useState(false);
   const [history, setHistory] = useState<ChatCompletionMessageParam[]>([
     { role: "system", content: "You are a helpful assistant." },
   ]);
 
-  useEffect(() => {
-    const scrollbox = scrollRef.current;
-    if (!scrollbox) return;
-
-    scrollbox.scrollTop = Math.max(
-      0,
-      scrollbox.scrollHeight - scrollbox.viewport.height,
-    );
-  }, [history, loading]);
-
   return (
     <box flexDirection="column" height="100%">
       <Header title="OpenSLM" subtitle="gpt-oss CLI" />
-      <Body history={history} />
-      <box padding={1}>
-        {loading ? <Spinner /> : null}
-      </box>
+      <Body history={history} loading={loading} />
       <Footer
         loading={loading}
         history={history}

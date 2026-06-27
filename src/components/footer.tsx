@@ -1,6 +1,7 @@
 import { InputRenderable } from "@opentui/core";
 import { ChatCompletionMessageParam } from "openai/resources";
 import { useRef } from "react";
+import { Spinner } from "./spinner";
 
 interface FooterProps {
     loading: boolean;
@@ -38,7 +39,10 @@ export function Footer({ loading, history, setHistory, setLoading, chat }: Foote
         }
     }
 
-    return (
+    return (<>
+        <box padding={1}>
+            {loading ? <Spinner /> : null}
+        </box>
         <box flexDirection="row" padding={1} backgroundColor="black">
             <text>{"> "}</text>
             <box flexGrow={1}>
@@ -53,5 +57,6 @@ export function Footer({ loading, history, setHistory, setLoading, chat }: Foote
                 />
             </box>
         </box>
+    </>
     );
 }

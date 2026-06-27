@@ -1,12 +1,27 @@
 import { ChatCompletionMessageParam } from "openai/resources";
 import { UserMessage } from "./user-message";
 import { AssistantMessage } from "./assistant-message";
+import { useEffect, useRef } from "react";
+import { ScrollBoxRenderable } from "@opentui/core";
 
 interface BodyProps {
     history: ChatCompletionMessageParam[];
+    loading: boolean;
 }
 
-export function Body({ history }: BodyProps) {
+export function Body({ history, loading }: BodyProps) {
+  const scrollRef = useRef<ScrollBoxRenderable>(null);
+  
+  useEffect(() => {
+    const scrollbox = scrollRef.current;
+    if (!scrollbox) return;
+
+    scrollbox.scrollTop = Math.max(
+      0,
+      scrollbox.scrollHeight - scrollbox.viewport.height,
+    );
+  }, [history, loading]);
+  
     return (
         <scrollbox
         flexGrow={1}
