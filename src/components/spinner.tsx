@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-const FRAMES = ["⠋ T", "⠙ Th", "⠹ Thi", "⠸ Thin", "⠼ Think", "⠴ Thinki", "⠦ Thinkin", "⠧ Thinking", "⠇ Thinking.", "⠏ Thinking..", "⠿ Thinking..."];
+const FRAMES = ["⠋ T", "⠙ Th", "⠹ Thi", "⠸ Thin", "⠼ Think", "⠴ Thinki", "⠦ Thinkin", "⠧ Thinking.", "⠇ Thinking..", "⠏ Thinking..."];
 
 export function Spinner() {
     const [frame, setFrame] = useState(0);

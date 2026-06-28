@@ -1,16 +1,27 @@
-export function Footer() {
+export interface FooterProps {
+    model: string;
+}
+
+export function Footer({ model }: FooterProps) {
     return (<box flexDirection="row"
+        justifyContent="space-between"
         backgroundColor="black"
         gap={2}
-        padding={1}
+        paddingLeft={1}
         flexShrink={0}
         flexGrow={0}
         borderStyle="single"
         borderColor="gray">
-        <text fg="#CC8400">/Clear</text>
-        <text fg="#CC8400">/Exit</text>
-        <text fg="#CC8400">/Help</text>
-        <text fg="#CC8400">/Settings</text>
+        <box flexDirection="row" gap={2}>
+            <text>Commands:</text>
+            <text fg="#CC8400">/clear</text>
+            <text fg="#CC8400">/exit</text>
+            <text fg="#CC8400">/settings</text>
+        </box>
+        <box flexDirection="row" gap={2}>
+            <text>Model:</text>
+            <text fg="#CC8400">{model}</text>
+        </box>
     </box>
     );
 }

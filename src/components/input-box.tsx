@@ -2,18 +2,37 @@ import { TextareaRenderable } from "@opentui/core";
 import { ChatCompletionMessageParam } from "openai/resources";
 import { useEffect, useRef, useState } from "react";
 import { Spinner } from "./spinner";
+import { OpenAI } from "openai";
+
+export type TokenUsage = {
+    prompt: number;
+    completion: number;
+};
+
+export const emptyTokenUsage: TokenUsage = { prompt: 0, completion: 0 };
 
 interface InputBoxProps {
     loading: boolean;
     history: ChatCompletionMessageParam[];
     setHistory: (history: ChatCompletionMessageParam[]) => void;
     setLoading: (loading: boolean) => void;
-    chat: (messages: ChatCompletionMessageParam[]) => Promise<string>;
+    openai: OpenAI;
+    model: string;
 }
 
-export function InputBox({ loading, history, setHistory, setLoading, chat }: InputBoxProps) {
+export function InputBox({ loading, history, setHistory, setLoading, openai, model }: InputBoxProps) {
     const [seconds, setSeconds] = useState(0);
     const inputRef = useRef<TextareaRenderable>(null);
+
+    async function chat(messages: ChatCompletionMessageParam[]) {
+        const response = await openai.chat.completions.create({
+            model,
+            messages,
+            stream: false,
+        });
+
+        return response.choices[0].message.content;
+    }
 
     function clearInput() {
         inputRef.current?.clear();
@@ -24,33 +43,23 @@ export function InputBox({ loading, history, setHistory, setLoading, chat }: Inp
     }
 
     async function handleSubmit(value: string) {
-        if (value === "/clear") {
+        const prompt = value.trim();
+
+        if (prompt === "/clear") {
             setHistory([]);
-
             clearInput();
-
             return;
         }
 
-        if (value === "/exit") {
+        if (prompt === "/exit") {
             clearInput();
-
             return process.exit(0);
         }
 
-        if (value === "/help") {
+        if (prompt === "/settings") {
             clearInput();
-
-            return console.log("Help");
-        }
-
-        if (value === "/settings") {
-            clearInput();
-
             return console.log("Settings");
         }
-
-        const prompt = value.trim();
 
         if (!prompt || loading) return;
 
@@ -99,7 +108,7 @@ export function InputBox({ loading, history, setHistory, setLoading, chat }: Inp
                     focusedBackgroundColor="black"
                     focusedTextColor="white"
                     focused
-                    placeholder={"Ask me anything..."} 
+                    placeholder={"Ask me anything..."}
                     onSubmit={() => {
                         void handleSubmit(getInputValue());
                     }}

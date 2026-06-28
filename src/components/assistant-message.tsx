@@ -18,7 +18,7 @@ const markdownSyntaxStyle = SyntaxStyle.fromStyles({
 
 export function AssistantMessage({ text }: AssistantMessageProps) {
     return (
-        <box width="100%" padding={1}>
+        <box width="100%">
             <markdown
                 content={text}
                 syntaxStyle={markdownSyntaxStyle}
