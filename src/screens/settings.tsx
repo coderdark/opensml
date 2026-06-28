@@ -36,10 +36,6 @@ export default function Settings({ onSave }: SettingsProps) {
 
             fs.writeFileSync(".env", `BASE_URL=${baseURL}\nAPI_KEY=${apiKey}\nMODEL=${model}`);
 
-            process.env.BASE_URL = baseURL;
-            process.env.API_KEY = apiKey;
-            process.env.MODEL = model;
-
             onSave(true);
         } catch (error) {
             console.error(error);

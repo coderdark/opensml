@@ -1,4 +1,4 @@
-import { TextareaRenderable } from "@opentui/core";
+import { TextareaRenderable, type KeyBinding } from "@opentui/core";
 import { ChatCompletionMessageParam } from "openai/resources";
 import { useEffect, useRef, useState } from "react";
 import { Spinner } from "./spinner";
@@ -10,6 +10,13 @@ export type TokenUsage = {
 };
 
 export const emptyTokenUsage: TokenUsage = { prompt: 0, completion: 0 };
+
+const textareaKeyBindings: KeyBinding[] = [
+    { name: "return", action: "submit" },
+    { name: "kpenter", action: "submit" },
+    { name: "return", shift: true, action: "newline" },
+    { name: "kpenter", shift: true, action: "newline" },
+];
 
 interface InputBoxProps {
     loading: boolean;
@@ -109,13 +116,9 @@ export function InputBox({ loading, history, setHistory, setLoading, openai, mod
                     focusedTextColor="white"
                     focused
                     placeholder={"Ask me anything..."}
+                    keyBindings={textareaKeyBindings}
                     onSubmit={() => {
                         void handleSubmit(getInputValue());
-                    }}
-                    onKeyDown={(e) => {
-                        if (e.name === "return" && !e.shift) {
-                            void handleSubmit(getInputValue());
-                        }
                     }}
                 />
             </box>
