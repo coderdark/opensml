@@ -25,6 +25,7 @@ export function Body({ history, loading }: BodyProps) {
   return (
     <box flexGrow={1} flexDirection="column" paddingLeft={1} paddingRight={1}>
       <scrollbox
+        ref={scrollRef}
         style={{
           contentOptions: { flexDirection: "column", gap: 1 },
           scrollbarOptions: {
