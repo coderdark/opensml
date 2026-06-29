@@ -14,17 +14,17 @@ export function Body({ history, loading }: BodyProps) {
 
   useEffect(() => {
     const scrollbox = scrollRef.current;
+
     if (!scrollbox) return;
 
-    scrollbox.scrollTop = Math.max(
-      0,
-      scrollbox.scrollHeight - scrollbox.viewport.height,
-    );
+    scrollbox.scrollTop = Math.max(0, scrollbox.scrollHeight - scrollbox.viewport.height);
   }, [history, loading]);
 
   return (
     <box flexGrow={1} flexDirection="column" paddingLeft={1} paddingRight={1}>
       <scrollbox
+        stickyScroll={true}
+        stickyStart={"bottom"}
         ref={scrollRef}
         style={{
           contentOptions: { flexDirection: "column", gap: 1 },

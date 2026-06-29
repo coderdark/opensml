@@ -23,7 +23,7 @@ function App() {
 
   return (
     <box flexGrow={1} flexDirection="column" height="100%">
-      {savedSettings ? <Chat/> : <Settings onSave={setSavedSettings} />}
+      {savedSettings ? <Chat/> : <Settings onSettingsSaved={setSavedSettings} />}
     </box>
   );
 }

@@ -7,10 +7,10 @@ type FocusedField = "baseURL" | "apiKey" | "model";
 const fields: FocusedField[] = ["baseURL", "apiKey", "model"];
 
 interface SettingsProps {
-    onSave: (onSave: boolean) => void;
+    onSettingsSaved: (onSave: boolean) => void;
 }
 
-export default function Settings({ onSave }: SettingsProps) {
+export default function Settings({ onSettingsSaved }: SettingsProps) {
     const [baseURL, setBaseURL] = useState("");
     const [apiKey, setAPIKey] = useState("");
     const [model, setModel] = useState("");
@@ -32,15 +32,13 @@ export default function Settings({ onSave }: SettingsProps) {
 
     function saveSettings() {
         try {
-            const settings = { baseURL, apiKey, model };
-
             fs.writeFileSync(".env", `BASE_URL=${baseURL}\nAPI_KEY=${apiKey}\nMODEL=${model}`);
 
-            onSave(true);
+            onSettingsSaved(true);
         } catch (error) {
             console.error(error);
 
-            onSave(false);
+            onSettingsSaved(false);
         }
     }
 

@@ -1,4 +1,5 @@
 import { TextareaRenderable, type KeyBinding } from "@opentui/core";
+import { useRenderer } from "@opentui/react";
 import { ChatCompletionMessageParam } from "openai/resources";
 import { useEffect, useRef, useState } from "react";
 import { Spinner } from "./spinner";
@@ -30,6 +31,7 @@ interface InputBoxProps {
 export function InputBox({ loading, history, setHistory, setLoading, openai, model }: InputBoxProps) {
     const [seconds, setSeconds] = useState(0);
     const inputRef = useRef<TextareaRenderable>(null);
+    const renderer = useRenderer();
 
     async function chat(messages: ChatCompletionMessageParam[]) {
         const response = await openai.chat.completions.create({
@@ -55,16 +57,21 @@ export function InputBox({ loading, history, setHistory, setLoading, openai, mod
         if (prompt === "/clear") {
             setHistory([]);
             clearInput();
+
             return;
         }
 
         if (prompt === "/exit") {
             clearInput();
+            
+            renderer.destroy();
+
             return process.exit(0);
         }
 
         if (prompt === "/settings") {
             clearInput();
+
             return console.log("Settings");
         }
 
