@@ -4,6 +4,8 @@ A terminal chat client for small language models, built with [OpenTUI](https://o
 
 OpenSLM talks to any OpenAI-compatible API, renders assistant replies as markdown (including tables and code blocks), and keeps the layout stable while the conversation grows.
 
+![OpenSLM terminal chat](./resources/main.png)
+
 ## Features
 
 - **First-run settings screen** — configure API connection before chatting
