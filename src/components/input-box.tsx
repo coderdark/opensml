@@ -52,6 +52,8 @@ export function InputBox({ loading, history, setHistory, setLoading, openai, mod
     }
 
     async function handleSubmit(value: string) {
+        if (loading) return;
+        
         const prompt = value.trim();
 
         if (prompt === "/clear") {
@@ -63,7 +65,7 @@ export function InputBox({ loading, history, setHistory, setLoading, openai, mod
 
         if (prompt === "/exit") {
             clearInput();
-            
+
             renderer.destroy();
 
             return process.exit(0);
