@@ -3,6 +3,12 @@
   "module": "src/index.tsx",
   "type": "module",
   "private": true,
+  "bin": {
+    "openslm": "src/index.tsx"
+  },
+  "files": [
+    "src"
+  ],  
   "scripts": {
     "dev": "bun run --watch src/index.tsx"
   },
@@ -20,5 +26,8 @@
     "dotenv": "^17.4.2",
     "openai": "^6.45.0",
     "react": "^19.2.7"
+  },
+  "engines": {
+    "bun": ">=1.0.0"
   }
 }
