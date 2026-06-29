@@ -18,11 +18,13 @@ const markdownSyntaxStyle = SyntaxStyle.fromStyles({
 
 export function AssistantMessage({ text }: AssistantMessageProps) {
     return (
-        <box width="100%">
+        <box width="100%" flexShrink={1} maxWidth="100%">
             <markdown
                 content={text}
                 syntaxStyle={markdownSyntaxStyle}
                 width="100%"
+                flexShrink={1}
+                maxWidth="100%"
                 tableOptions={{
                     style: "grid",
                     widthMode: "full",

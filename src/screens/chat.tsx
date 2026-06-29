@@ -2,14 +2,12 @@ import { useMemo, useState } from "react";
 import OpenAI from "openai";
 import type { ChatCompletionMessageParam } from "openai/resources/chat/completions";
 import { Header } from "../components/header";
-import { InputBox, emptyTokenUsage, type TokenUsage } from "../components/input-box";
+import { InputBox } from "../components/input-box";
 import { Body } from "../components/body";
 import { Footer } from "../components/footer";
 
 export default function Chat() {
   const [loading, setLoading] = useState(false);
-  const [usage, setUsage] = useState<TokenUsage>(emptyTokenUsage);
-  const contextLimit = Number(process.env.CONTEXT_LIMIT) || undefined;
   const [history, setHistory] = useState<ChatCompletionMessageParam[]>([
     { role: "system", content: "You are a helpful assistant that does not make assumptions." },
   ]);
