@@ -6,6 +6,8 @@ OpenSLM talks to any OpenAI-compatible API, renders assistant replies as markdow
 
 ![OpenSLM terminal chat](./resources/main.png)
 
+AI was used at a minimum where I needed docs (README.md, or libs api), and used it to find a solutions for some of the errors/bugs (basically a nice old search with AI).
+
 ## Features
 
 - **First-run settings screen** — configure API connection before chatting

@@ -1,9 +1,5 @@
 import { RGBA, SyntaxStyle } from "@opentui/core";
 
-interface AssistantMessageProps {
-    text: string;
-}
-
 // https://opentui.com/docs/components/markdown/
 // https://opentui.com/docs/components/code/#markdown-styles
 const markdownSyntaxStyle = SyntaxStyle.fromStyles({
@@ -16,9 +12,14 @@ const markdownSyntaxStyle = SyntaxStyle.fromStyles({
     default: { fg: RGBA.fromHex("#E6EDF3") },
 });
 
-export function AssistantMessage({ text }: AssistantMessageProps) {
+interface ChatAssistantMessageProps {
+    text: string;
+    backgroundColor?: string;
+}
+
+export function ChatAssistantMessage({ text, backgroundColor="transparent" }: ChatAssistantMessageProps) {
     return (
-        <box width="100%" flexShrink={1} maxWidth="100%">
+        <box width="100%" flexShrink={1} maxWidth="100%" backgroundColor={backgroundColor}>
             <markdown
                 content={text}
                 syntaxStyle={markdownSyntaxStyle}

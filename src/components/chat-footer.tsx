@@ -1,12 +1,12 @@
-export interface FooterProps {
+export interface ChatFooterProps {
     model: string;
 }
 
-export function Footer({ model }: FooterProps) {
+export function ChatFooter({ model }: ChatFooterProps) {
     return (<box flexDirection="row"
         justifyContent="space-between"
         backgroundColor="black"
-        gap={2}
+        gap={1}
         paddingLeft={1}
         flexShrink={0}
         flexGrow={0}
@@ -18,7 +18,7 @@ export function Footer({ model }: FooterProps) {
             <text fg="#CC8400">/exit</text>
             <text fg="#CC8400">/settings</text>
         </box>
-        <box flexDirection="row" gap={2}>
+        <box flexDirection="row" gap={1}>
             <text>Model:</text>
             <text fg="#CC8400">{model}</text>
         </box>
